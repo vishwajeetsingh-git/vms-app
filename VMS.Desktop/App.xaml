@@ -11,6 +11,13 @@
             <conv:BoolToVisibilityConverter        x:Key="BoolToVisibility"/>
             <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
 
+            <!-- Reusable dialog footer — no separator, matches dialog SurfaceColor background -->
+            <Style x:Key="DialogFooter" TargetType="Border">
+                <Setter Property="Background"      Value="{DynamicResource SurfaceColor}"/>
+                <Setter Property="BorderThickness" Value="0"/>
+                <Setter Property="Padding"         Value="16,12"/>
+            </Style>
+
             <!-- Design tokens – dark defaults; ThemeManager overwrites at runtime -->
             <SolidColorBrush x:Key="BackgroundColor"      Color="#1E1E1E"/>
             <SolidColorBrush x:Key="SurfaceColor"         Color="#252526"/>
@@ -36,6 +43,9 @@
             </DataTemplate>
             <DataTemplate DataType="{x:Type pages:PlaceholderViewModel}">
                 <vp:PlaceholderPage/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type pages:CamerasViewModel}">
+                <vp:CamerasPage/>
             </DataTemplate>
 
             <!-- Global TextBlock -->
@@ -149,6 +159,125 @@
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsFocused" Value="True">
                                     <Setter Property="BorderBrush" Value="{DynamicResource PrimaryColor}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Global ComboBox -->
+            <Style TargetType="ComboBox">
+                <Setter Property="Background"      Value="{DynamicResource InputBackgroundColor}"/>
+                <Setter Property="Foreground"      Value="{DynamicResource TextPrimaryColor}"/>
+                <Setter Property="BorderBrush"     Value="{DynamicResource BorderColor}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Padding"         Value="8,0"/>
+                <Setter Property="FontFamily"      Value="Segoe UI"/>
+                <Setter Property="FontSize"        Value="13"/>
+                <Setter Property="Cursor"          Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBox">
+                            <Grid x:Name="MainGrid">
+                                <!-- Outer border (closed state) -->
+                                <Border x:Name="Bd"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="4"/>
+
+                                <!-- Selected-item text -->
+                                <ContentPresenter x:Name="ContentSite"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                  Margin="8,0,30,0"
+                                                  VerticalAlignment="Center"
+                                                  IsHitTestVisible="False"/>
+
+                                <!-- Invisible toggle button spanning the whole control -->
+                                <ToggleButton Focusable="False"
+                                              IsChecked="{Binding IsDropDownOpen, Mode=TwoWay,
+                                                          RelativeSource={RelativeSource TemplatedParent}}"
+                                              Background="Transparent"
+                                              BorderThickness="0">
+                                    <ToggleButton.Template>
+                                        <ControlTemplate TargetType="ToggleButton">
+                                            <Border Background="Transparent"/>
+                                        </ControlTemplate>
+                                    </ToggleButton.Template>
+                                </ToggleButton>
+
+                                <!-- Chevron -->
+                                <TextBlock Text="▾"
+                                           HorizontalAlignment="Right"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,10,0"
+                                           FontSize="10"
+                                           IsHitTestVisible="False"
+                                           Foreground="{DynamicResource TextSecondaryColor}"/>
+
+                                <!-- Dropdown popup -->
+                                <Popup x:Name="PART_Popup"
+                                       IsOpen="{TemplateBinding IsDropDownOpen}"
+                                       Placement="Bottom"
+                                       AllowsTransparency="True"
+                                       Focusable="False"
+                                       PopupAnimation="Fade">
+                                    <Border x:Name="DropBd"
+                                            Background="{DynamicResource CardBackgroundColor}"
+                                            BorderBrush="{DynamicResource BorderColor}"
+                                            BorderThickness="1"
+                                            CornerRadius="4"
+                                            MinWidth="{Binding ActualWidth, ElementName=MainGrid}"
+                                            Margin="0,2,0,0">
+                                        <ScrollViewer MaxHeight="200"
+                                                      VerticalScrollBarVisibility="Auto">
+                                            <ItemsPresenter/>
+                                        </ScrollViewer>
+                                    </Border>
+                                </Popup>
+                            </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="BorderBrush"
+                                            Value="{DynamicResource PrimaryColor}"/>
+                                </Trigger>
+                                <Trigger Property="IsDropDownOpen" Value="True">
+                                    <Setter TargetName="Bd" Property="BorderBrush"
+                                            Value="{DynamicResource PrimaryColor}"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- Global ComboBoxItem -->
+            <Style TargetType="ComboBoxItem">
+                <Setter Property="Background"  Value="Transparent"/>
+                <Setter Property="Foreground"  Value="{DynamicResource TextPrimaryColor}"/>
+                <Setter Property="Padding"     Value="10,7"/>
+                <Setter Property="FontFamily"  Value="Segoe UI"/>
+                <Setter Property="FontSize"    Value="13"/>
+                <Setter Property="Cursor"      Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ComboBoxItem">
+                            <Border x:Name="Bd"
+                                    Background="{TemplateBinding Background}"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="Background"
+                                            Value="{DynamicResource MenuHoverColor}"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Bd" Property="Background"
+                                            Value="{DynamicResource MenuActiveColor}"/>
+                                    <Setter Property="Foreground" Value="White"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>

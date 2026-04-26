@@ -34,8 +34,7 @@
         </StackPanel>
 
         <!-- Footer -->
-        <Border Grid.Row="2" Background="{DynamicResource BackgroundColor}"
-                BorderThickness="0" Padding="16,12">
+        <Border Grid.Row="2" Style="{StaticResource DialogFooter}">
             <Grid>
                 <!-- OK mode (default) -->
                 <StackPanel x:Name="OkPanel" Orientation="Horizontal"

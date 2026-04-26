@@ -1,0 +1,158 @@
+<inf:ChromeWindow x:Class="VMS.Views.Pages.AddEditCameraDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:inf="clr-namespace:VMS.Infrastructure"
+        xmlns:views="clr-namespace:VMS.Views"
+        xmlns:conv="clr-namespace:VMS.Converters"
+        WindowStyle="None"
+        Background="{DynamicResource SurfaceColor}"
+        Width="480" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <Style TargetType="Label">
+            <Setter Property="Foreground"  Value="{DynamicResource TextSecondaryColor}"/>
+            <Setter Property="FontFamily"  Value="Segoe UI"/>
+            <Setter Property="FontSize"    Value="11"/>
+            <Setter Property="Padding"     Value="0,0,0,4"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title bar -->
+        <views:WindowTitleBar Grid.Row="0" x:Name="TitleBarCtrl"
+                              ShowMaximize="False" ShowMinimize="False"/>
+
+        <!-- Form body -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="24,20,24,8">
+
+                <!-- Name -->
+                <Label Content="NAME *"/>
+                <TextBox x:Name="NameBox" Height="32" Margin="0,0,0,14"
+                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- Protocol -->
+                <Label Content="PROTOCOL *"/>
+                <ComboBox x:Name="ProtocolBox" Height="32" Margin="0,0,0,14"
+                          ItemsSource="{Binding Protocols}"
+                          SelectedItem="{Binding Protocol, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- VR Server ID -->
+                <Label Content="VR SERVER ID *"/>
+                <TextBox x:Name="VRServerBox" Height="32" Margin="0,0,0,14"
+                         Text="{Binding VRServerId, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- Location -->
+                <Label Content="LOCATION"/>
+                <TextBox x:Name="LocationBox" Height="32" Margin="0,0,0,16"
+                         Text="{Binding Location, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <!-- ─── RTSP section ─── -->
+                <StackPanel Visibility="{Binding IsRtsp, Converter={StaticResource BoolToVisibility}}">
+                    <Border Background="{DynamicResource BackgroundColor}" CornerRadius="4"
+                            BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                            Padding="16,12" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="RTSP Connection" FontWeight="SemiBold"
+                                       FontSize="12" Margin="0,0,0,12"
+                                       Foreground="{DynamicResource TextSecondaryColor}"/>
+
+                            <Label Content="RTSP URL *"/>
+                            <TextBox x:Name="RtspUrlBox" Height="32" Margin="0,0,0,12"
+                                     Text="{Binding RtspUrl, UpdateSourceTrigger=PropertyChanged}"
+                                     ToolTip="e.g. rtsp://192.168.1.100:554/stream"/>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <Label Content="USERNAME"/>
+                                    <TextBox x:Name="RtspUsernameBox" Height="32"
+                                             Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <Label Content="PASSWORD"/>
+                                    <PasswordBox x:Name="RtspPasswordBox" Height="32"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- ─── ONVIF section ─── -->
+                <StackPanel Visibility="{Binding IsOnvif, Converter={StaticResource BoolToVisibility}}">
+                    <Border Background="{DynamicResource BackgroundColor}" CornerRadius="4"
+                            BorderBrush="{DynamicResource BorderColor}" BorderThickness="1"
+                            Padding="16,12" Margin="0,0,0,14">
+                        <StackPanel>
+                            <TextBlock Text="ONVIF Connection" FontWeight="SemiBold"
+                                       FontSize="12" Margin="0,0,0,12"
+                                       Foreground="{DynamicResource TextSecondaryColor}"/>
+
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <Label Content="HOST *"/>
+                                    <TextBox x:Name="OnvifHostBox" Height="32"
+                                             Text="{Binding OnvifHost, UpdateSourceTrigger=PropertyChanged}"
+                                             ToolTip="e.g. 192.168.1.100"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <Label Content="PORT *"/>
+                                    <TextBox x:Name="OnvifPortBox" Height="32"
+                                             Text="{Binding OnvifPort, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="12"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <Label Content="USERNAME"/>
+                                    <TextBox x:Name="OnvifUsernameBox" Height="32"
+                                             Text="{Binding OnvifUsername, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <Label Content="PASSWORD"/>
+                                    <PasswordBox x:Name="OnvifPasswordBox" Height="32"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Footer buttons -->
+        <Border Grid.Row="2" Style="{StaticResource DialogFooter}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Cancel" Width="90" Height="32" Margin="0,0,10,0"
+                        Background="{DynamicResource CardBackgroundColor}"
+                        Foreground="{DynamicResource TextPrimaryColor}"
+                        Click="Cancel_Click"/>
+                <Button Content="Save" Width="90" Height="32"
+                        Click="Save_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</inf:ChromeWindow>

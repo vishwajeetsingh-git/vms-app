@@ -63,7 +63,7 @@ namespace VMS.ViewModels
                 Name = "DEVICES", Icon = "⚙️", IsExpanded = true,
                 Items = new()
                 {
-                    new NavItem { Name = "Cameras",    Icon = "📷", IconPath = "/Assets/Icons/device-management.png", PageFactory = () => new PlaceholderViewModel("Cameras") },
+                    new NavItem { Name = "Cameras",    Icon = "📷", IconPath = "/Assets/Icons/device-management.png", PageFactory = () => new CamerasViewModel() },
                     new NavItem { Name = "VR Servers", Icon = "🖥️", IconPath = "/Assets/Icons/system-configuration.png", PageFactory = () => new PlaceholderViewModel("VR Servers") },
                 }
             });

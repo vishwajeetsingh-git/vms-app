@@ -7,7 +7,8 @@ namespace VMS
 {
     public partial class App : Application
     {
-        public static AuthService Auth { get; } = new();
+        public static AuthService    Auth    { get; } = new();
+        public static CameraService  Cameras { get; } = new();
 
         protected override void OnStartup(StartupEventArgs e)
         {
