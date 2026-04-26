@@ -9,8 +9,16 @@ namespace VMS.Infrastructure
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-            var source = HwndSource.FromHwnd(new WindowInteropHelper(this).Handle);
-            source?.AddHook(WndProc);
+            var helper = new WindowInteropHelper(this);
+            var source = HwndSource.FromHwnd(helper.Handle);
+            if (source == null || source.Handle == IntPtr.Zero) return;
+
+            var style = NativeMethods.GetWindowLong(source.Handle, NativeMethods.GWL_EXSTYLE);
+            style |=  NativeMethods.WS_EX_APPWINDOW;
+            style &= ~NativeMethods.WS_EX_TOOLWINDOW;
+            NativeMethods.SetWindowLong(source.Handle, NativeMethods.GWL_EXSTYLE, style);
+
+            source.AddHook(WndProc);
         }
 
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)

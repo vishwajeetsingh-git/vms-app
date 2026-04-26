@@ -71,7 +71,8 @@
             </StackPanel>
 
             <!-- Window controls -->
-            <StackPanel Grid.Column="1" Orientation="Horizontal">
+            <StackPanel Grid.Column="1" Orientation="Horizontal"
+                        WindowChrome.IsHitTestVisibleInChrome="True">
                 <Button x:Name="MinBtn"  Style="{StaticResource WinBtnStyle}"  Content="─"
                         Click="Minimize_Click"/>
                 <Button x:Name="MaxBtn"  Style="{StaticResource WinBtnStyle}"  Content="□"

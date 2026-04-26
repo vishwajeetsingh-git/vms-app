@@ -4,10 +4,14 @@
         xmlns:inf="clr-namespace:VMS.Infrastructure"
         xmlns:views="clr-namespace:VMS.Views"
         WindowStyle="None"
+        AllowsTransparency="False"
         Background="{DynamicResource SurfaceColor}"
         Width="380" Height="460"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0,0,0,1" ResizeBorderThickness="0" CaptionHeight="36" CornerRadius="0"/>
+    </WindowChrome.WindowChrome>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="36"/>

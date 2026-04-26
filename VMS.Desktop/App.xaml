@@ -23,6 +23,7 @@
             <SolidColorBrush x:Key="TextPrimaryColor"     Color="#D4D4D4"/>
             <SolidColorBrush x:Key="TextSecondaryColor"   Color="#858585"/>
             <SolidColorBrush x:Key="InputBackgroundColor" Color="#3C3C3C"/>
+            <SolidColorBrush x:Key="InputTextColor"       Color="White"/>
             <SolidColorBrush x:Key="PrimaryColor"         Color="#007ACC"/>
             <SolidColorBrush x:Key="SecondaryColor"       Color="#569CD6"/>
             <SolidColorBrush x:Key="SuccessColor"         Color="#6A9955"/>
@@ -80,14 +81,18 @@
 
             <!-- Global TextBox -->
             <Style TargetType="TextBox">
-                <Setter Property="Background"      Value="{DynamicResource InputBackgroundColor}"/>
-                <Setter Property="Foreground"      Value="{DynamicResource TextPrimaryColor}"/>
-                <Setter Property="CaretBrush"      Value="{DynamicResource TextPrimaryColor}"/>
-                <Setter Property="BorderBrush"     Value="{DynamicResource BorderColor}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Padding"         Value="8,6"/>
-                <Setter Property="FontFamily"      Value="Segoe UI"/>
-                <Setter Property="FontSize"        Value="13"/>
+                <Setter Property="Background"                        Value="{DynamicResource InputBackgroundColor}"/>
+                <Setter Property="Foreground"                        Value="{DynamicResource InputTextColor}"/>
+                <Setter Property="CaretBrush"                        Value="{DynamicResource InputTextColor}"/>
+                <Setter Property="SelectionBrush"                    Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="SelectionTextBrush"                Value="White"/>
+                <Setter Property="BorderBrush"                       Value="{DynamicResource BorderColor}"/>
+                <Setter Property="BorderThickness"                   Value="1"/>
+                <Setter Property="Padding"                           Value="8,0"/>
+                <Setter Property="FontFamily"                        Value="Segoe UI"/>
+                <Setter Property="FontSize"                          Value="13"/>
+                <Setter Property="TextOptions.TextFormattingMode"    Value="Display"/>
+                <Setter Property="TextOptions.TextRenderingMode"     Value="ClearType"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="TextBox">
@@ -97,6 +102,8 @@
                                     Padding="{TemplateBinding Padding}"
                                     CornerRadius="4">
                                 <ScrollViewer x:Name="PART_ContentHost"
+                                              Background="Transparent"
+                                              Foreground="{TemplateBinding Foreground}"
                                               VerticalAlignment="Center"
                                               HorizontalScrollBarVisibility="Hidden"
                                               VerticalScrollBarVisibility="Hidden"/>
@@ -113,14 +120,17 @@
 
             <!-- Global PasswordBox -->
             <Style TargetType="PasswordBox">
-                <Setter Property="Background"      Value="{DynamicResource InputBackgroundColor}"/>
-                <Setter Property="Foreground"      Value="{DynamicResource TextPrimaryColor}"/>
-                <Setter Property="CaretBrush"      Value="{DynamicResource TextPrimaryColor}"/>
-                <Setter Property="BorderBrush"     Value="{DynamicResource BorderColor}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Padding"         Value="8,6"/>
-                <Setter Property="FontFamily"      Value="Segoe UI"/>
-                <Setter Property="FontSize"        Value="13"/>
+                <Setter Property="Background"                        Value="{DynamicResource InputBackgroundColor}"/>
+                <Setter Property="Foreground"                        Value="{DynamicResource InputTextColor}"/>
+                <Setter Property="CaretBrush"                        Value="{DynamicResource InputTextColor}"/>
+                <Setter Property="SelectionBrush"                    Value="{DynamicResource PrimaryColor}"/>
+                <Setter Property="BorderBrush"                       Value="{DynamicResource BorderColor}"/>
+                <Setter Property="BorderThickness"                   Value="1"/>
+                <Setter Property="Padding"                           Value="8,0"/>
+                <Setter Property="FontFamily"                        Value="Segoe UI"/>
+                <Setter Property="FontSize"                          Value="13"/>
+                <Setter Property="TextOptions.TextFormattingMode"    Value="Display"/>
+                <Setter Property="TextOptions.TextRenderingMode"     Value="ClearType"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="PasswordBox">
@@ -130,6 +140,8 @@
                                     Padding="{TemplateBinding Padding}"
                                     CornerRadius="4">
                                 <ScrollViewer x:Name="PART_ContentHost"
+                                              Background="Transparent"
+                                              Foreground="{TemplateBinding Foreground}"
                                               VerticalAlignment="Center"
                                               HorizontalScrollBarVisibility="Hidden"
                                               VerticalScrollBarVisibility="Hidden"/>

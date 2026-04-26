@@ -7,17 +7,28 @@ namespace VMS.Infrastructure
 {
     public static class NativeMethods
     {
+        public const int GWL_EXSTYLE      = -20;
+        public const int WS_EX_APPWINDOW  = 0x40000;
+        public const int WS_EX_TOOLWINDOW = 0x80;
+        public const int WM_GETMINMAXINFO = 0x0024;
+        public const uint MONITOR_DEFAULTTONEAREST = 2;
+
+        [DllImport("user32.dll")] public static extern int  GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")] public static extern int  SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        [DllImport("user32.dll")] public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
+        [DllImport("user32.dll")] public static extern bool   GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
+
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT { public int Left, Top, Right, Bottom; }
 
         [StructLayout(LayoutKind.Sequential)]
+        public struct POINT { public int X, Y; }
+
+        [StructLayout(LayoutKind.Sequential)]
         public struct MINMAXINFO
         {
-            public System.Drawing.Point ptReserved, ptMaxSize, ptMaxPosition, ptMinTrackSize, ptMaxTrackSize;
+            public POINT ptReserved, ptMaxSize, ptMaxPosition, ptMinTrackSize, ptMaxTrackSize;
         }
-
-        [DllImport("user32.dll")] public static extern IntPtr MonitorFromWindow(IntPtr hwnd, uint dwFlags);
-        [DllImport("user32.dll")] public static extern bool GetMonitorInfo(IntPtr hMonitor, ref MONITORINFO lpmi);
 
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
         public struct MONITORINFO
@@ -31,14 +42,15 @@ namespace VMS.Infrastructure
         {
             var mmi = (MINMAXINFO)Marshal.PtrToStructure(lParam, typeof(MINMAXINFO))!;
             var hwnd = new WindowInteropHelper(window).Handle;
-            var monitor = MonitorFromWindow(hwnd, 0x00000002);
+            var monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
             if (monitor != IntPtr.Zero)
             {
                 var info = new MONITORINFO { cbSize = Marshal.SizeOf<MONITORINFO>() };
                 GetMonitorInfo(monitor, ref info);
                 var work = info.rcWork;
-                mmi.ptMaxPosition = new System.Drawing.Point(work.Left, work.Top);
-                mmi.ptMaxSize = new System.Drawing.Point(work.Right - work.Left, work.Bottom - work.Top);
+                var mon  = info.rcMonitor;
+                mmi.ptMaxPosition = new POINT { X = Math.Abs(work.Left - mon.Left), Y = Math.Abs(work.Top - mon.Top) };
+                mmi.ptMaxSize     = new POINT { X = Math.Abs(work.Right - work.Left), Y = Math.Abs(work.Bottom - work.Top) };
             }
             Marshal.StructureToPtr(mmi, lParam, true);
         }

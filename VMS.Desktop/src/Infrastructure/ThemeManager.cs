@@ -27,6 +27,7 @@ namespace VMS.Infrastructure
                 r["TextPrimaryColor"]   = B(0x1C, 0x1C, 0x1E);
                 r["TextSecondaryColor"] = B(0x8E, 0x8E, 0x93);
                 r["InputBackgroundColor"]=B(0xFF,0xFF,0xFF);
+                r["InputTextColor"]     = B(0x1C, 0x1C, 0x1E);
                 r["PrimaryColor"]       = B(0x00, 0x7A, 0xFF);
                 r["SecondaryColor"]     = B(0x58, 0x56, 0xD6);
                 r["SuccessColor"]       = B(0x34, 0xC7, 0x59);
@@ -47,6 +48,7 @@ namespace VMS.Infrastructure
                 r["TextPrimaryColor"]   = B(0xD4, 0xD4, 0xD4);
                 r["TextSecondaryColor"] = B(0x85, 0x85, 0x85);
                 r["InputBackgroundColor"]=B(0x3C,0x3C,0x3C);
+                r["InputTextColor"]     = B(0xFF, 0xFF, 0xFF);
                 r["PrimaryColor"]       = B(0x00, 0x7A, 0xCC);
                 r["SecondaryColor"]     = B(0x56, 0x9C, 0xD6);
                 r["SuccessColor"]       = B(0x6A, 0x99, 0x55);

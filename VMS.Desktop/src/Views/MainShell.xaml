@@ -5,10 +5,15 @@
         xmlns:views="clr-namespace:VMS.Views"
         xmlns:models="clr-namespace:VMS.Models"
         WindowStyle="None"
+        AllowsTransparency="False"
         Background="{DynamicResource BackgroundColor}"
         MinWidth="900" MinHeight="600"
         Width="1280" Height="780"
         WindowStartupLocation="CenterScreen">
+
+    <WindowChrome.WindowChrome>
+        <WindowChrome GlassFrameThickness="0,0,0,1" ResizeBorderThickness="7" CaptionHeight="36" CornerRadius="0"/>
+    </WindowChrome.WindowChrome>
 
     <Window.Resources>
         <!-- Flat sidebar button base -->
