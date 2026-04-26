@@ -1,0 +1,303 @@
+<inf:ChromeWindow x:Class="VMS.Views.MainShell"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:inf="clr-namespace:VMS.Infrastructure"
+        xmlns:views="clr-namespace:VMS.Views"
+        xmlns:models="clr-namespace:VMS.Models"
+        WindowStyle="None"
+        Background="{DynamicResource BackgroundColor}"
+        MinWidth="900" MinHeight="600"
+        Width="1280" Height="780"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Flat sidebar button base -->
+        <Style x:Key="SidebarBtnStyle" TargetType="Button">
+            <Setter Property="Background"            Value="Transparent"/>
+            <Setter Property="Foreground"            Value="{DynamicResource TextPrimaryColor}"/>
+            <Setter Property="BorderThickness"       Value="0"/>
+            <Setter Property="HorizontalAlignment"   Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor"                Value="Hand"/>
+            <Setter Property="FontFamily"            Value="Segoe UI"/>
+            <Setter Property="FontSize"              Value="13"/>
+            <Setter Property="Padding"               Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" Height="32">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background"
+                                        Value="{DynamicResource MenuHoverColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Group header button (slightly taller) -->
+        <Style x:Key="GroupHeaderBtnStyle" TargetType="Button" BasedOn="{StaticResource SidebarBtnStyle}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}" Height="28">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background"
+                                        Value="{DynamicResource MenuHoverColor}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Hamburger toggle button -->
+        <Style x:Key="HamburgerBtnStyle" TargetType="Button">
+            <Setter Property="Background"      Value="Transparent"/>
+            <Setter Property="Foreground"      Value="{DynamicResource TextSecondaryColor}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Width"           Value="48"/>
+            <Setter Property="Height"          Value="40"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontSize"        Value="16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#2A2D2E"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>    <!-- Title bar -->
+            <RowDefinition Height="*"/>     <!-- Body -->
+            <RowDefinition Height="24"/>    <!-- Status bar -->
+        </Grid.RowDefinitions>
+
+        <!-- ── Title bar ── -->
+        <views:WindowTitleBar Grid.Row="0" Title="Video Management System"/>
+
+        <!-- ── Body ── -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>   <!-- Sidebar -->
+                <ColumnDefinition Width="*"/>       <!-- Content -->
+            </Grid.ColumnDefinitions>
+
+            <!-- ── Sidebar ── -->
+            <Grid Grid.Column="0" Background="{DynamicResource SidebarColor}"
+                  x:Name="SidebarPanel">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Width" Value="220"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSidebarExpanded}" Value="False">
+                                <Setter Property="Width" Value="48"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>   <!-- Hamburger -->
+                    <RowDefinition Height="*"/>      <!-- Nav -->
+                </Grid.RowDefinitions>
+
+                <!-- Hamburger toggle -->
+                <Button Grid.Row="0" Style="{StaticResource HamburgerBtnStyle}"
+                        Content="☰" HorizontalAlignment="Left"
+                        Command="{Binding ToggleSidebarCommand}"/>
+
+                <!-- Separator line under hamburger -->
+                <Border Grid.Row="0" Height="1" VerticalAlignment="Bottom"
+                        Background="{DynamicResource BorderColor}" Opacity="0.4"/>
+
+                <!-- Nav groups -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding NavGroups}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type models:NavGroup}">
+                                <StackPanel Margin="0,2,0,0">
+
+                                    <!-- Group header -->
+                                    <Button Style="{StaticResource GroupHeaderBtnStyle}"
+                                            Command="{Binding DataContext.ToggleGroupCommand,
+                                                      RelativeSource={RelativeSource AncestorType=Window}}"
+                                            CommandParameter="{Binding}">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="48"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="20"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Group emoji icon -->
+                                            <TextBlock Grid.Column="0" Text="{Binding Icon}"
+                                                       FontSize="12" HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource TextSecondaryColor}"/>
+
+                                            <!-- Group name (hidden when sidebar collapsed) -->
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                                       FontSize="10" FontWeight="SemiBold"
+                                                       VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource TextSecondaryColor}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock"
+                                                           BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding DataContext.IsSidebarExpanded,
+                                                                         RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                         Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+
+                                            <!-- Expand / collapse arrow -->
+                                            <TextBlock Grid.Column="2" Text="›"
+                                                       FontSize="14" VerticalAlignment="Center"
+                                                       Foreground="{DynamicResource TextSecondaryColor}"
+                                                       RenderTransformOrigin="0.5,0.5">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock"
+                                                           BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                        <Setter Property="RenderTransform">
+                                                            <Setter.Value>
+                                                                <RotateTransform Angle="90"/>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsExpanded}" Value="True">
+                                                                <Setter Property="RenderTransform">
+                                                                    <Setter.Value>
+                                                                        <RotateTransform Angle="270"/>
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding DataContext.IsSidebarExpanded,
+                                                                         RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                         Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Button>
+
+                                    <!-- Group items (collapsed when group is closed) -->
+                                    <ItemsControl ItemsSource="{Binding Items}"
+                                                  Visibility="{Binding IsExpanded,
+                                                               Converter={StaticResource BoolToVisibility}}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type models:NavItem}">
+                                                <Button Command="{Binding DataContext.NavigateCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
+                                                        CommandParameter="{Binding}">
+                                                    <Button.Style>
+                                                        <Style TargetType="Button"
+                                                               BasedOn="{StaticResource SidebarBtnStyle}">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsSelected}"
+                                                                             Value="True">
+                                                                    <Setter Property="Background"
+                                                                            Value="{DynamicResource MenuActiveColor}"/>
+                                                                    <Setter Property="Foreground" Value="White"/>
+                                                                </DataTrigger>
+                                                                <!-- Dimmed for placeholder items -->
+                                                                <DataTrigger Binding="{Binding IsPlaceholder}"
+                                                                             Value="True">
+                                                                    <Setter Property="Opacity" Value="0.55"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Button.Style>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="48"/>
+                                                            <ColumnDefinition Width="*"/>
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <!-- PNG icon -->
+                                                        <Image Grid.Column="0"
+                                                               Source="{Binding IconPath}"
+                                                               Width="16" Height="16"
+                                                               HorizontalAlignment="Center"
+                                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                                                        <!-- Item name (hidden when sidebar collapsed) -->
+                                                        <TextBlock Grid.Column="1" Text="{Binding Name}"
+                                                                   VerticalAlignment="Center" FontSize="13">
+                                                            <TextBlock.Style>
+                                                                <Style TargetType="TextBlock"
+                                                                       BasedOn="{StaticResource {x:Type TextBlock}}">
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding DataContext.IsSidebarExpanded,
+                                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                     Value="False">
+                                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </TextBlock.Style>
+                                                        </TextBlock>
+                                                    </Grid>
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+
+            <!-- Vertical divider -->
+            <Border Grid.Column="0" Width="1" HorizontalAlignment="Right"
+                    Background="{DynamicResource BorderColor}" Opacity="0.5"/>
+
+            <!-- ── Content area ── -->
+            <ContentControl Grid.Column="1"
+                            Content="{Binding CurrentPage}"
+                            Background="{DynamicResource BackgroundColor}"/>
+        </Grid>
+
+        <!-- ── Status bar ── -->
+        <Border Grid.Row="2" Background="{DynamicResource SidebarColor}"
+                BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0">
+            <Grid Margin="12,0">
+                <TextBlock Text="Ready" VerticalAlignment="Center" FontSize="11"
+                           Foreground="{DynamicResource TextSecondaryColor}"/>
+                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center"
+                           FontSize="11" Foreground="{DynamicResource TextSecondaryColor}">
+                    <TextBlock.Text>
+                        <Binding Path="." StringFormat="VMS · Connected"/>
+                    </TextBlock.Text>
+                </TextBlock>
+            </Grid>
+        </Border>
+    </Grid>
+</inf:ChromeWindow>

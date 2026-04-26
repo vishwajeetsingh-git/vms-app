@@ -1,0 +1,57 @@
+<inf:ChromeWindow x:Class="VMS.Views.AppDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:inf="clr-namespace:VMS.Infrastructure"
+        xmlns:views="clr-namespace:VMS.Views"
+        WindowStyle="None"
+        Background="{DynamicResource SurfaceColor}"
+        Width="360" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="36"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title bar -->
+        <views:WindowTitleBar Grid.Row="0" x:Name="TitleBarCtrl"
+                              ShowMaximize="False" ShowMinimize="False"/>
+
+        <!-- Message area -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24,20,24,16">
+            <Border x:Name="IconCircle" Width="40" Height="40" CornerRadius="20"
+                    VerticalAlignment="Top" Margin="0,0,16,0"
+                    Background="{DynamicResource PrimaryColor}">
+                <TextBlock x:Name="IconText" Text="ℹ" FontSize="18"
+                           HorizontalAlignment="Center" VerticalAlignment="Center"
+                           Foreground="White"/>
+            </Border>
+            <TextBlock x:Name="MessageText" TextWrapping="Wrap" MaxWidth="240"
+                       VerticalAlignment="Center" FontSize="13"
+                       Foreground="{DynamicResource TextPrimaryColor}"/>
+        </StackPanel>
+
+        <!-- Footer -->
+        <Border Grid.Row="2" Background="{DynamicResource BackgroundColor}"
+                BorderThickness="0" Padding="16,12">
+            <Grid>
+                <!-- OK mode (default) -->
+                <StackPanel x:Name="OkPanel" Orientation="Horizontal"
+                            HorizontalAlignment="Right">
+                    <Button Content="OK" Width="80" Height="30" Click="OK_Click"/>
+                </StackPanel>
+                <!-- Confirm mode (Yes / No) -->
+                <StackPanel x:Name="ConfirmPanel" Orientation="Horizontal"
+                            HorizontalAlignment="Right" Visibility="Collapsed">
+                    <Button Content="No" Width="80" Height="30" Click="No_Click"
+                            Background="{DynamicResource CardBackgroundColor}"
+                            Foreground="{DynamicResource TextPrimaryColor}"
+                            Margin="0,0,8,0"/>
+                    <Button Content="Yes" Width="80" Height="30" Click="Yes_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</inf:ChromeWindow>
